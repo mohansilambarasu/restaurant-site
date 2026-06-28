@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Restro NYC</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --navy: #233D4D;
+      --orange: #FF9E20;
+      --warm-orange: #FE7F2D;
+      --green: #17433F;
+      --gray: #EAECF0;
+      --white: #ffffff;
+      --cream: #f8f6f0;
+      --ink: #1d2d32;
+      --muted: #6d777c;
+      --border: rgba(35, 61, 77, 0.14);
+      --shadow: 0 24px 60px rgba(35, 61, 77, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--cream);
+      color: var(--ink);
+      font-family: "Lato", Arial, sans-serif;
+      line-height: 1.65;
+    }
+
+    body.nav-open {
+      overflow: hidden;
+    }
+
+    h1,
+    h2,
+    h3 {
+      margin: 0;
+      color: var(--navy);
+      font-family: "Playfair Display", Georgia, serif;
+      line-height: 1.05;
+    }
+
+    p {
+      margin: 0;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      display: flex;
+      min-height: 82px;
+      align-items: center;
+      justify-content: space-between;
+      gap: 28px;
+      padding: 20px clamp(20px, 5vw, 76px);
+      border-bottom: 1px solid rgba(35, 61, 77, 0.08);
+      background: rgba(248, 246, 240, 0.96);
+      color: var(--navy);
+      backdrop-filter: blur(14px);
+    }
+
+    .brand {
+      position: relative;
+      z-index: 32;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 900;
+    }
+
+    .logo-mark {
+      display: grid;
+      width: 42px;
+      height: 42px;
+      place-items: center;
+      border: 1px solid rgba(35, 61, 77, 0.18);
+      border-radius: 50%;
+      background: var(--white);
+      color: var(--orange);
+      font-family: "Playfair Display", Georgia, serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      box-shadow: 0 10px 24px rgba(35, 61, 77, 0.08);
+    }
+
+    .brand-name {
+      font-size: 1rem;
+      letter-spacing: 0;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: clamp(18px, 3vw, 38px);
+      color: var(--navy);
+      font-size: 0.95rem;
+      font-weight: 700;
+    }
+
+    .nav-links a {
+      transition: color 180ms ease;
+    }
+
+    .nav-links a:hover,
+    .nav-links a:focus-visible {
+      color: var(--warm-orange);
+    }
+
+    .menu-toggle {
+      position: relative;
+      z-index: 32;
+      display: none;
+      width: 44px;
+      height: 44px;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(35, 61, 77, 0.16);
+      border-radius: 50%;
+      background: var(--white);
+      color: var(--navy);
+      cursor: pointer;
+    }
+
+    .menu-toggle span,
+    .menu-toggle::before,
+    .menu-toggle::after {
+      display: block;
+      width: 19px;
+      height: 2px;
+      border-radius: 999px;
+      background: currentColor;
+      content: "";
+      transition: transform 180ms ease, opacity 180ms ease;
+    }
+
+    .menu-toggle::before,
+    .menu-toggle::after {
+      position: absolute;
+    }
+
+    .menu-toggle::before {
+      transform: translateY(-7px);
+    }
+
+    .menu-toggle::after {
+      transform: translateY(7px);
+    }
+
+    .menu-toggle[aria-expanded="true"] span {
+      opacity: 0;
+    }
+
+    .menu-toggle[aria-expanded="true"]::before {
+      transform: rotate(45deg);
+    }
+
+    .menu-toggle[aria-expanded="true"]::after {
+      transform: rotate(-45deg);
+    }
+
+    .hero {
+      background: var(--gray);
+      padding: 20px;
+    }
+
+    .hero-inner {
+      display: grid;
+      width: min(1180px, 100%);
+      min-height: calc(100vh - 82px);
+      margin: 0 auto;
+      grid-template-columns: minmax(0, 0.95fr) minmax(320px, 1.05fr);
+      gap: clamp(36px, 6vw, 84px);
+      align-items: center;
+    }
+
+    .hero-copy {
+      max-width: 610px;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      margin-bottom: 18px;
+      color: var(--warm-orange);
+      font-size: 0.78rem;
+      font-weight: 900;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    .hero h1 {
+      font-size: clamp(3.25rem, 8vw, 6.8rem);
+    }
+
+    .hero p {
+      max-width: 560px;
+      margin: 24px 0 34px;
+      color: var(--muted);
+      font-size: clamp(1.08rem, 2vw, 1.28rem);
+    }
+
+    .cta-button {
+      display: inline-flex;
+      min-height: 54px;
+      align-items: center;
+      justify-content: center;
+      padding: 14px 30px;
+      border: 2px solid var(--orange);
+      border-radius: 999px;
+      background: var(--orange);
+      color: var(--navy);
+      font-weight: 900;
+      transition: background 180ms ease, color 180ms ease, transform 180ms ease;
+    }
+
+    .cta-button:hover,
+    .cta-button:focus-visible {
+      background: transparent;
+      color: var(--green);
+      transform: translateY(-2px);
+    }
+
+    .hero-image {
+      position: relative;
+      overflow: hidden;
+      border-radius: 28px 28px 140px 28px;
+      background: var(--white);
+      box-shadow: var(--shadow);
+    }
+
+    .hero-image::after {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(rgba(23, 67, 63, 0.08), rgba(23, 67, 63, 0.18));
+      content: "";
+    }
+
+    .hero-image img {
+      height: min(640px, 72vh);
+      min-height: 460px;
+      object-fit: cover;
+    }
+
+    section {
+      padding: clamp(76px, 10vw, 128px) clamp(20px, 5vw, 76px);
+    }
+
+    .section-inner {
+      width: min(1120px, 100%);
+      margin: 0 auto;
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(300px, 0.95fr);
+      gap: clamp(36px, 7vw, 86px);
+      align-items: center;
+    }
+
+    .section-kicker {
+      margin-bottom: 12px;
+      color: var(--warm-orange);
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .about-copy h2,
+    .featured h2,
+    .reservations h2 {
+      margin-bottom: 22px;
+      font-size: clamp(2.45rem, 5vw, 4.25rem);
+    }
+
+    .about-copy p,
+    .featured-header p,
+    .reservation-header p {
+      color: var(--muted);
+      font-size: 1.06rem;
+    }
+
+    .chef-quote {
+      min-height: 330px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 20px;
+      padding: clamp(34px, 5vw, 52px);
+      border-radius: 24px;
+      background: var(--green);
+      color: var(--white);
+      box-shadow: var(--shadow);
+    }
+
+    .chef-quote blockquote {
+      margin: 0;
+      font-family: "Playfair Display", Georgia, serif;
+      font-size: clamp(1.7rem, 3vw, 2.45rem);
+      line-height: 1.18;
+    }
+
+    .chef-quote cite {
+      color: rgba(255, 255, 255, 0.76);
+      font-style: normal;
+      font-weight: 900;
+    }
+
+    .featured {
+      background: var(--white);
+    }
+
+    .featured-header {
+      display: flex;
+      margin-bottom: 38px;
+      align-items: end;
+      justify-content: space-between;
+      gap: 28px;
+    }
+
+    .featured-header p {
+      max-width: 390px;
+    }
+
+    .dish-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 26px;
+    }
+
+    .dish-card {
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--white);
+      box-shadow: 0 18px 45px rgba(35, 61, 77, 0.06);
+    }
+
+    .dish-card img {
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+    }
+
+    .dish-content {
+      display: flex;
+      min-height: 220px;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 22px;
+      padding: 24px;
+    }
+
+    .dish-card h3 {
+      margin-bottom: 10px;
+      font-size: 1.65rem;
+    }
+
+    .dish-card p {
+      color: var(--muted);
+    }
+
+    .price {
+      color: var(--orange);
+      font-size: 1.2rem;
+      font-weight: 900;
+    }
+
+    .reservations {
+      background: var(--gray);
+    }
+
+    .reservation-layout {
+      display: grid;
+      grid-template-columns: minmax(280px, 0.8fr) minmax(0, 1.2fr);
+      gap: clamp(34px, 6vw, 76px);
+      align-items: start;
+    }
+
+    .reservation-header {
+      position: sticky;
+      top: 112px;
+    }
+
+    .contact-list {
+      display: grid;
+      gap: 12px;
+      margin-top: 32px;
+      color: var(--navy);
+      font-weight: 900;
+    }
+
+    .contact-list a {
+      color: var(--green);
+      transition: color 180ms ease;
+    }
+
+    .contact-list a:hover,
+    .contact-list a:focus-visible {
+      color: var(--warm-orange);
+    }
+
+    .reservation-form {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+      padding: clamp(24px, 4vw, 36px);
+      border: 1px solid rgba(35, 61, 77, 0.1);
+      border-radius: 24px;
+      background: var(--white);
+      box-shadow: var(--shadow);
+    }
+
+    .field {
+      display: grid;
+      gap: 8px;
+    }
+
+    .field.full {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      color: var(--navy);
+      font-size: 0.88rem;
+      font-weight: 900;
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      border: 1px solid rgba(35, 61, 77, 0.16);
+      border-radius: 12px;
+      background: #fbfbf9;
+      color: var(--ink);
+      font: inherit;
+      padding: 13px 14px;
+      outline: none;
+      transition: border-color 180ms ease, box-shadow 180ms ease;
+    }
+
+    textarea {
+      min-height: 132px;
+      resize: vertical;
+    }
+
+    input:focus,
+    textarea:focus {
+      border-color: var(--orange);
+      box-shadow: 0 0 0 4px rgba(255, 158, 32, 0.16);
+    }
+
+    .submit-button {
+      min-height: 54px;
+      border: 2px solid var(--green);
+      border-radius: 999px;
+      background: var(--green);
+      color: var(--white);
+      cursor: pointer;
+      font: inherit;
+      font-weight: 900;
+      transition: background 180ms ease, color 180ms ease, transform 180ms ease;
+    }
+
+    .submit-button:hover,
+    .submit-button:focus-visible {
+      background: transparent;
+      color: var(--green);
+      transform: translateY(-2px);
+    }
+
+    .footer {
+      padding: 46px 20px;
+      background: var(--navy);
+      color: rgba(255, 255, 255, 0.62);
+      text-align: center;
+    }
+
+    .footer-brand {
+      display: block;
+      margin-bottom: 10px;
+      color: var(--white);
+      font-family: "Playfair Display", Georgia, serif;
+      font-size: 2rem;
+      font-weight: 700;
+    }
+
+    @media (max-width: 960px) {
+      .hero-inner,
+      .about-grid,
+      .reservation-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-inner {
+        min-height: auto;
+      }
+
+      .hero-copy {
+        max-width: 720px;
+      }
+
+      .hero-image img {
+        height: 440px;
+        min-height: 0;
+      }
+
+      .dish-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .reservation-header {
+        position: static;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .navbar {
+        min-height: 74px;
+      }
+
+      .menu-toggle {
+        display: inline-flex;
+      }
+
+      .nav-links {
+        position: fixed;
+        top: 74px;
+        right: 16px;
+        left: 16px;
+        display: grid;
+        gap: 0;
+        padding: 10px 22px 18px;
+        border: 1px solid rgba(35, 61, 77, 0.1);
+        border-radius: 22px;
+        background: var(--white);
+        box-shadow: var(--shadow);
+        transform: translateY(-145%);
+        transition: transform 220ms ease;
+      }
+
+      .nav-links.is-open {
+        transform: translateY(0);
+      }
+
+      .nav-links a {
+        padding: 15px 0;
+        border-top: 1px solid rgba(35, 61, 77, 0.08);
+      }
+
+      .nav-links a:first-child {
+        border-top: 0;
+      }
+
+      .featured-header {
+        display: block;
+      }
+
+      .featured-header p {
+        max-width: none;
+      }
+
+      .dish-grid,
+      .reservation-form {
+        grid-template-columns: 1fr;
+      }
+
+      .dish-content {
+        min-height: auto;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .brand-name {
+        font-size: 0.92rem;
+      }
+
+      .logo-mark {
+        width: 38px;
+        height: 38px;
+      }
+
+      .hero {
+        padding-top: 42px;
+      }
+
+      .hero-image {
+        border-radius: 20px 20px 80px 20px;
+      }
+
+      .hero-image img {
+        height: 330px;
+      }
+
+      .cta-button,
+      .submit-button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="navbar">
+    <a class="brand" href="#top" aria-label="Restro NYC home">
+      <span class="logo-mark">R</span>
+      <span class="brand-name">Restro NYC</span>
+    </a>
+    <button class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="primary-nav">
+      <span></span>
+    </button>
+    <nav class="nav-links" id="primary-nav" aria-label="Primary navigation">
+      <a href="#featured">Featured</a>
+      <a href="#about">About</a>
+      <a href="#menu">Menu</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="hero-inner">
+        <div class="hero-copy">
+          <span class="eyebrow">Italian-American Fusion</span>
+          <h1>Where Italy Meets America</h1>
+          <p>Handcrafted dishes, graceful hospitality, and the warmth of a neighborhood table in the heart of New York City.</p>
+          <a class="cta-button" href="#reservation">Reserve a Table</a>
+        </div>
+        <div class="hero-image">
+          <img src="https://www.wallanza.com/cdn/shop/articles/five-crazy-wallpaper-ideas-that-suit-every-restaurant-theme-4706494.jpg?v=1767077032" alt="Elegant Italian-American dish">
+        </div>
+      </div>
+    </section>
+
+    <section class="about" id="about">
+      <div class="section-inner about-grid">
+        <div class="about-copy">
+          <p class="section-kicker">Our Story</p>
+          <h2>Italian roots, New York rhythm.</h2>
+          <p>
+            Restro NYC is a modern Italian-American fusion restaurant built around
+            handmade pastas, bright market produce, crisp pies, and familiar comforts
+            served with quiet elegance. Our menu celebrates the charm of old-world
+            cooking while keeping the energy, generosity, and polish of New York dining.
+          </p>
+        </div>
+        <aside class="chef-quote" aria-label="Chef quote">
+          <blockquote>
+            "A memorable meal should feel effortless: honest ingredients, graceful
+            technique, and a table that invites you to stay."
+          </blockquote>
+          <cite>- Chef Alessio Marino</cite>
+        </aside>
+      </div>
+    </section>
+
+    <section class="featured" id="featured">
+      <div class="section-inner">
+        <div class="featured-header">
+          <div>
+            <p class="section-kicker">Featured</p>
+            <h2>Signature Dishes</h2>
+          </div>
+          <p>Rustic Italian craft meets polished American comfort across our house favorites.</p>
+        </div>
+        <div class="dish-grid" id="sample-menu">
+          <article class="dish-card">
+            <img src="https://www.acozykitchen.com/wp-content/uploads/2024/10/tiramisu_15-scaled.jpg" alt="Tiramisu">
+            <div class="dish-content">
+              <div>
+                <h3>Tiramisu</h3>
+                <p>Espresso-soaked layers with mascarpone cream, cocoa, and a soft amaretto finish.</p>
+              </div>
+              <span class="price">$12</span>
+            </div>
+          </article>
+          <article class="dish-card">
+            <img src="https://platform.ny.eater.com/wp-content/uploads/sites/6/chorus/uploads/chorus_asset/file/25335933/IMG_8683.jpg?quality=90&strip=all&crop=0%2C0%2C100%2C100&w=1440" alt="NY Style Pizza">
+            <div class="dish-content">
+              <div>
+                <h3>NY Style Pizza</h3>
+                <p>Thin, crisp-edged crust with tomato, mozzarella, basil, and pepperoni.</p>
+              </div>
+              <span class="price">$21</span>
+            </div>
+          </article>
+          <article class="dish-card">
+            <img src="https://somuchfoodblog.com/wp-content/uploads/2025/03/Truffle-Mushroom-Pasta9.jpg" alt="Truffle Pasta">
+            <div class="dish-content">
+              <div>
+                <h3>Truffle Pasta</h3>
+                <p>Fresh pasta folded through mushroom cream, parmesan, herbs, and black truffle.</p>
+              </div>
+              <span class="price">$26</span>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <div id="external-menu"></div>
+
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3023.905187168775!2d-73.9851306845939!3d40.74881797932786!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c259af18e7b8a5%3A0x6e5b6e5b6e5b6e5b!2sEmpire%20State%20Building!5e0!3m2!1sen!2sus!4v1697040000000" 
+      width="100%" 
+      height="400" 
+      style="border:0;" 
+      allowfullscreen="false" 
+      loading="lazy" 
+      referrerpolicy="no-referrer-when-downgrade">
+    </iframe>
+
+    <section class="reservations" id="reservation">
+      <div class="section-inner reservation-layout">
+        <div class="reservation-header">
+          <p class="section-kicker">Reservations</p>
+          <h2>Save your seat.</h2>
+          <p>Tell us when you are coming, and our team will prepare a warm table for your party.</p>
+          <div class="contact-list" id="contact">
+            <span>Phone: <a href="tel:+10000000000">+1 (xxx) xxx-xxxx</a></span>
+            <span>Email: <a href="mailto:restrobarnyc@dummy.com">restrobarnyc@dummy.com</a></span>
+          </div>
+        </div>
+        <form class="reservation-form">
+          <div class="field">
+            <label for="full-name">Full Name</label>
+            <input id="full-name" name="full-name" type="text" autocomplete="name" required>
+          </div>
+          <div class="field">
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" autocomplete="email" required>
+          </div>
+          <div class="field">
+            <label for="phone">Phone</label>
+            <input id="phone" name="phone" type="tel" autocomplete="tel" required>
+          </div>
+          <div class="field">
+            <label for="date">Date</label>
+            <input id="date" name="date" type="date" required>
+          </div>
+          <div class="field full">
+            <label for="guests">Number of Guests</label>
+            <input id="guests" name="guests" type="number" min="1" max="20" required>
+          </div>
+          <div class="field full">
+            <label for="requests">Special Requests</label>
+            <textarea id="requests" name="requests"></textarea>
+          </div>
+          <button class="submit-button field full" type="submit">Submit Reservation</button>
+        </form>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <span class="footer-brand">Restro NYC</span>
+    <p>&copy; 2026 Restro NYC. All rights reserved.</p>
+  </footer>
+
+  <!-- CDN from npm -->
+  <script src="https://unpkg.com/@mohansilambu/menu-admin@0.0.2/dist/menu-admin.umd.js"></script>
+
+  <script>
+    const instance = MenuAdmin.createMenuAdmin(
+      document.getElementById("external-menu"),
+      { theme: "light" }
+    );
+    console.log(instance);           // should show { unmount: fn }
+    console.log(typeof instance.unmount); // should show "function"
+  </script>
+
+  <script>
+    var menuToggle = document.querySelector(".menu-toggle");
+    var navLinks = document.querySelector(".nav-links");
+    var body = document.body;
+    var reservationForm = document.querySelector(".reservation-form");
+
+    function closeMenu() {
+      navLinks.classList.remove("is-open");
+      menuToggle.setAttribute("aria-expanded", "false");
+      menuToggle.setAttribute("aria-label", "Open menu");
+      body.classList.remove("nav-open");
+    }
+
+    menuToggle.addEventListener("click", function() {
+      var isOpen = navLinks.classList.toggle("is-open");
+
+      menuToggle.setAttribute("aria-expanded", String(isOpen));
+      menuToggle.setAttribute("aria-label", isOpen ? "Close menu" : "Open menu");
+      body.classList.toggle("nav-open", isOpen);
+    });
+
+    document.querySelectorAll('a[href^="#"]').forEach(function(link) {
+      link.addEventListener("click", function(event) {
+        var target = document.querySelector(link.getAttribute("href"));
+
+        if (target) {
+          event.preventDefault();
+          closeMenu();
+          target.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      });
+    });
+
+    window.addEventListener("resize", function() {
+      if (window.innerWidth > 760) {
+        closeMenu();
+      }
+    });
+
+    reservationForm.addEventListener("submit", function(event) {
+      event.preventDefault();
+      reservationForm.reset();
+    });
+  </script>
+</body>
+</html>
